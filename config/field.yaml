@@ -1,0 +1,115 @@
+# Field / well parameters.
+# Every leaf is {value, unit, source}. Values not taken from a cited source carry
+# source: "PLACEHOLDER - calibrate" and are shown with a placeholder badge in the UI.
+# A value given as [lo, hi] is a range the synthetic field samples wells from.
+
+crude:
+  api_gravity:        {value: [17.0, 19.0], unit: degAPI, source: "SIH 26120 problem statement", tier: A}
+  thermal_expansion:  {value: 7.0e-4, unit: 1/K, source: "PLACEHOLDER - calibrate"}
+  # Dead-oil lab viscosity points for an 18 degAPI reference crude (T_K, nu_cSt).
+  # Fitted with Walther/ASTM D341 at start-up; per-well RLS refines A,B online.
+  viscosity_lab_points:
+    value: [[303.15, 42000.0], [320.15, 9000.0], [343.15, 1500.0], [373.15, 260.0], [423.15, 45.0], [473.15, 14.0]]
+    unit: "[K, cSt]"
+    source: "PLACEHOLDER - calibrate"
+  # log10(nu) shift per degAPI away from 18 (heavier crude -> more viscous)
+  api_log_visc_slope: {value: -0.12, unit: log10(cSt)/degAPI, source: "PLACEHOLDER - calibrate"}
+  asphaltene_note:    {value: "high", unit: "-", source: "SIH 26120 problem statement", tier: A}
+
+reservoir:
+  formation:          {value: "Jodhpur Sandstone", unit: "-", source: "SIH 26120 problem statement", tier: A}
+  T_R:                {value: [46.0, 48.0], unit: degC, source: "SIH 26120 problem statement", tier: A}
+  depth:              {value: [900.0, 1100.0], unit: m, source: "PLACEHOLDER - calibrate"}
+  net_thickness:      {value: [8.0, 18.0], unit: m, source: "PLACEHOLDER - calibrate"}
+  p_initial:          {value: [55.0, 75.0], unit: bar, source: "PLACEHOLDER - calibrate (problem statement: low pressure)"}
+  p_min:              {value: 12.0, unit: bar, source: "PLACEHOLDER - calibrate"}
+  J_cold:             {value: [0.035, 0.07], unit: m3/d/bar, source: "PLACEHOLDER - calibrate"}
+  r_w:                {value: 0.089, unit: m, source: "PLACEHOLDER - calibrate (7in casing hole)"}
+  r_e:                {value: 120.0, unit: m, source: "PLACEHOLDER - calibrate"}
+  M_R:                {value: 2.35e6, unit: J/m3/K, source: "PLACEHOLDER - calibrate (typical sandstone+fluids)"}
+  M_ob:               {value: 2.30e6, unit: J/m3/K, source: "PLACEHOLDER - calibrate (typical shale)"}
+  lambda_ob:          {value: 1.7, unit: W/m/K, source: "PLACEHOLDER - calibrate"}
+  # Tank-model depletion: bar of pressure lost per m3 of oil voidage is 1/compliance.
+  tank_compliance:    {value: [180.0, 300.0], unit: m3/bar, source: "PLACEHOLDER - calibrate"}
+  injectivity:        {value: 9.0, unit: t/d/bar, source: "PLACEHOLDER - calibrate"}
+
+water_cut:
+  wc_early:           {value: 0.92, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  wc_late:            {value: [0.30, 0.45], unit: fraction, source: "PLACEHOLDER - calibrate"}
+  tau:                {value: [6.0, 12.0], unit: d, source: "PLACEHOLDER - calibrate"}
+
+wellbore:
+  T_surface:          {value: 28.0, unit: degC, source: "PLACEHOLDER - calibrate (mean ambient, Rajasthan)"}
+  r_ti:               {value: 0.0310, unit: m, source: "PLACEHOLDER - calibrate (2-7/8in tubing ID)"}
+  r_to:               {value: 0.0365, unit: m, source: "PLACEHOLDER - calibrate (2-7/8in tubing OD)"}
+  r_ci:               {value: 0.0785, unit: m, source: "PLACEHOLDER - calibrate (7in casing ID)"}
+  r_cw:               {value: 0.108, unit: m, source: "PLACEHOLDER - calibrate (cement/wellbore radius)"}
+  U_inject:           {value: 12.0, unit: W/m2/K, source: "PLACEHOLDER - calibrate"}
+  U_produce:          {value: 25.0, unit: W/m2/K, source: "PLACEHOLDER - calibrate"}
+  k_e:                {value: 2.0, unit: W/m/K, source: "PLACEHOLDER - calibrate"}
+  alpha_e:            {value: 9.0e-7, unit: m2/s, source: "PLACEHOLDER - calibrate"}
+  n_cells:            {value: 100, unit: "-", source: "numerical setting"}
+  roughness_friction: {value: 0.02, unit: "-", source: "PLACEHOLDER - Darcy friction factor, homogeneous two-phase"}
+  p_wellhead:         {value: 8.0, unit: bar, source: "PLACEHOLDER - calibrate"}
+  p_casing:           {value: 2.0, unit: bar, source: "PLACEHOLDER - calibrate"}
+
+pump:
+  plunger_diameter:   {value: [0.0381, 0.04445, 0.0508], unit: m, source: "PLACEHOLDER - calibrate (1.50/1.75/2.00in)"}
+  depth_above_perfs:  {value: 25.0, unit: m, source: "PLACEHOLDER - calibrate"}
+  leak_fraction:      {value: 0.03, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  plunger_drag:       {value: 0.10, unit: fraction_of_rod_drag, source: "PLACEHOLDER - calibrate"}
+
+pumping_unit:
+  # Conventional crank-balanced beam unit (API RP 11L-style link lengths).
+  A:                  {value: 3.05, unit: m, source: "PLACEHOLDER - calibrate (beam front arm)"}
+  C:                  {value: 2.44, unit: m, source: "PLACEHOLDER - calibrate (beam back arm)"}
+  I:                  {value: 2.44, unit: m, source: "PLACEHOLDER - calibrate (saddle to crank, horizontal)"}
+  H:                  {value: 3.35, unit: m, source: "PLACEHOLDER - calibrate (saddle above crank)"}
+  P:                  {value: 3.35, unit: m, source: "PLACEHOLDER - calibrate (pitman)"}
+  R_options:          {value: [0.76, 0.86, 0.97], unit: m, source: "PLACEHOLDER - calibrate (crank holes)"}
+  R_default_index:    {value: 1, unit: "-", source: "PLACEHOLDER - calibrate"}
+
+drivetrain:
+  eta_gearbox:        {value: 0.95, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  eta_belt:           {value: 0.96, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  eta_motor:          {value: 0.90, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  eta_vfd:            {value: 0.97, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  motor_rpm_at_60hz:  {value: 1180.0, unit: rpm, source: "PLACEHOLDER - calibrate"}
+  total_reduction:    {value: 120.0, unit: "-", source: "PLACEHOLDER - calibrate (gearbox x sheave)"}
+
+drag:
+  drag_multiplier:    {value: 2.0, unit: "-", source: "PLACEHOLDER - calibrate (couplings/guides)"}
+
+simulation:
+  n_wells:            {value: 12, unit: "-", source: "numerical setting"}
+  seed:               {value: 20260930, unit: "-", source: "numerical setting"}
+  dt_inject:          {value: 6.0, unit: h, source: "numerical setting"}
+  dt_produce:         {value: 1.0, unit: h, source: "numerical setting"}
+  card_every_hours:   {value: 12.0, unit: h, source: "numerical setting"}
+  lab_sample_every_days: {value: 10.0, unit: d, source: "numerical setting"}
+  wave_nodes:         {value: 40, unit: "-", source: "numerical setting"}
+  wave_strokes:       {value: 3, unit: "-", source: "numerical setting"}
+  replay_seconds_per_day: {value: 10.0, unit: s, source: "numerical setting"}
+  persist_every_ticks: {value: 1, unit: "-", source: "numerical setting"}
+
+noise:
+  load_sigma:         {value: 0.01, unit: fraction_of_range, source: "PLACEHOLDER - calibrate"}
+  position_sigma:     {value: 0.004, unit: m, source: "PLACEHOLDER - calibrate"}
+  rate_sigma:         {value: 0.05, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  pressure_sigma:     {value: 0.3, unit: bar, source: "PLACEHOLDER - calibrate"}
+  temperature_sigma:  {value: 0.5, unit: K, source: "PLACEHOLDER - calibrate"}
+  power_sigma:        {value: 0.03, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  visc_lab_sigma:     {value: 0.05, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  dropout_prob:       {value: 0.01, unit: probability, source: "PLACEHOLDER - calibrate"}
+  spike_prob:         {value: 0.005, unit: probability, source: "PLACEHOLDER - calibrate"}
+  clock_jitter:       {value: 30.0, unit: s, source: "PLACEHOLDER - calibrate"}
+
+events:
+  gas_interference_rate: {value: 0.02, unit: 1/d, source: "PLACEHOLDER - calibrate"}
+  gas_void_fraction:  {value: [0.2, 0.45], unit: fraction, source: "PLACEHOLDER - calibrate"}
+  gas_duration:       {value: [1.0, 4.0], unit: d, source: "PLACEHOLDER - calibrate"}
+  unseat_rate:        {value: 0.002, unit: 1/d, source: "PLACEHOLDER - calibrate"}
+  unseat_duration:    {value: [0.5, 1.5], unit: d, source: "PLACEHOLDER - calibrate"}
+  failure_damage_threshold: {value: 1.0, unit: "-", source: "PLACEHOLDER - Miner's rule D=1"}
+  failure_downtime:   {value: 4.0, unit: d, source: "PLACEHOLDER - calibrate"}
+  float_downtime:     {value: 0.05, unit: d, source: "PLACEHOLDER - calibrate (per float hour lost)"}

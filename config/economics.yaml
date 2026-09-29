@@ -1,0 +1,11 @@
+currency:           {value: "USD", unit: "-", source: "PLACEHOLDER - calibrate"}
+oil_price:          {value: 70.0, unit: USD/bbl, source: "PLACEHOLDER - calibrate"}
+steam_cost:         {value: 18.0, unit: USD/t, source: "PLACEHOLDER - calibrate"}
+tariff:             {value: 0.10, unit: USD/kWh, source: "PLACEHOLDER - calibrate"}
+opex_rate:          {value: 120.0, unit: USD/d, source: "PLACEHOLDER - calibrate"}
+fixed_cost_cycle:   {value: 6000.0, unit: USD, source: "PLACEHOLDER - calibrate (switching/workover per cycle)"}
+water_handling:     {value: 0.8, unit: USD/m3, source: "PLACEHOLDER - calibrate"}
+discount_rate:      {value: 0.10, unit: 1/yr, source: "PLACEHOLDER - calibrate"}
+production_weight:  {value: 0.0, unit: "-", source: "objective setting (0 = value only)"}
+production_weight_alt: {value: 0.5, unit: "-", source: "objective setting (production-weighted run)"}
+failure_cost:       {value: 25000.0, unit: USD, source: "PLACEHOLDER - calibrate (rod job)"}

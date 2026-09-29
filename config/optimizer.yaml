@@ -1,0 +1,28 @@
+steam_mass:         {value: [1000.0, 5000.0], unit: t, source: "PLACEHOLDER - calibrate"}
+injection_pressure: {value: [60.0, 125.0], unit: bar, source: "PLACEHOLDER - calibrate (bottomhole)"}
+soak_time:          {value: [2.0, 12.0], unit: d, source: "PLACEHOLDER - calibrate"}
+fracture_pressure:  {value: 140.0, unit: bar, source: "PLACEHOLDER - calibrate"}
+frac_safety_factor: {value: 0.9, unit: "-", source: "PLACEHOLDER - calibrate"}
+generator_capacity: {value: 250.0, unit: t/d, source: "PLACEHOLDER - calibrate"}
+surface_quality:    {value: 0.80, unit: fraction, source: "PLACEHOLDER - calibrate"}
+min_sandface_quality: {value: 0.35, unit: fraction, source: "PLACEHOLDER - calibrate"}
+p_wf_target:        {value: 6.0, unit: bar, source: "PLACEHOLDER - calibrate"}
+T_max:              {value: 150.0, unit: d, source: "PLACEHOLDER - calibrate"}
+dt_cycle:           {value: 1.0, unit: d, source: "numerical setting"}
+n_init:             {value: 10, unit: "-", source: "BUILD_SPEC (8-12 Sobol)"}
+n_iter:             {value: 30, unit: "-", source: "BUILD_SPEC (30-60)"}
+n_init_fast:        {value: 6, unit: "-", source: "harness setting"}
+n_iter_fast:        {value: 10, unit: "-", source: "harness setting"}
+n_param_samples:    {value: 8, unit: "-", source: "uncertainty: calibration-parameter samples"}
+seed:               {value: 7, unit: "-", source: "numerical setting"}
+baseline:
+  steam_mass:       {value: 3000.0, unit: t, source: "PLACEHOLDER - current practice"}
+  injection_pressure: {value: 90.0, unit: bar, source: "PLACEHOLDER - current practice"}
+  soak_time:        {value: 5.0, unit: d, source: "PLACEHOLDER - current practice"}
+  cutoff_mode:      {value: "days", unit: "-", source: "PLACEHOLDER - current practice (days|tonnage)"}
+  cutoff_days:      {value: 90.0, unit: d, source: "PLACEHOLDER - current practice"}
+  cutoff_tonnage:   {value: 1100.0, unit: m3, source: "PLACEHOLDER - current practice"}
+  spm:              {value: 4.0, unit: 1/min, source: "PLACEHOLDER - current practice"}
+  fillage_threshold: {value: 0.6, unit: fraction, source: "PLACEHOLDER - current practice"}
+  adjust_delay:     {value: 3.0, unit: d, source: "PLACEHOLDER - current practice"}
+  spm_step:         {value: 0.5, unit: 1/min, source: "PLACEHOLDER - current practice"}

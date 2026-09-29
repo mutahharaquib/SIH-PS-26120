@@ -1,0 +1,16 @@
+E:                  {value: 2.05e11, unit: Pa, source: "Steel Young's modulus (handbook)"}
+rho_steel:          {value: 7850.0, unit: kg/m3, source: "Steel density (handbook)"}
+grades:
+  # Minimum tensile strength per API Spec 11B.
+  C:                {value: 620.0e6, unit: Pa, source: "API Spec 11B grade C (90 ksi)", tier: A}
+  K:                {value: 586.0e6, unit: Pa, source: "API Spec 11B grade K (85 ksi)", tier: A}
+  D:                {value: 793.0e6, unit: Pa, source: "API Spec 11B grade D (115 ksi)", tier: A}
+grade:              {value: "D", unit: "-", source: "PLACEHOLDER - calibrate"}
+service_factor:     {value: 0.9, unit: "-", source: "PLACEHOLDER - calibrate (mildly corrosive)"}
+# Taper design (top to bottom): [diameter_m, fraction_of_length]
+taper:
+  value: [[0.0254, 0.30], [0.02223, 0.33], [0.01905, 0.37]]
+  unit: "[m, fraction]"
+  source: "PLACEHOLDER - calibrate (API 86 taper: 1in/7-8in/3-4in)"
+sn_N_ref:           {value: 1.0e7, unit: cycles, source: "PLACEHOLDER - uncalibrated S-N proxy"}
+sn_m:               {value: 8.0, unit: "-", source: "PLACEHOLDER - uncalibrated S-N proxy"}

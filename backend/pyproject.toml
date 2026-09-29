@@ -1,0 +1,38 @@
+[project]
+name = "css-srp-twin"
+version = "0.1.0"
+description = "Coupled well-to-surface digital twin for CSS + SRP optimization (SIH 26120)"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26", "scipy>=1.11", "pydantic>=2.5", "fastapi>=0.110", "uvicorn>=0.27",
+  "sqlalchemy>=2.0", "pyyaml>=6", "scikit-learn>=1.4", "iapws>=1.5", "matplotlib>=3.8",
+  "httpx>=0.27", "asyncua>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "hypothesis>=6", "ruff>=0.4", "mypy>=1.8", "types-PyYAML"]
+bo = ["botorch>=0.10", "gpytorch>=1.11"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = ["slow: long-running tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
+ignore = ["E741", "B008"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["core.*", "physics.*"]
+strict = true
+disallow_any_generics = false
+warn_return_any = false
