@@ -11,5 +11,5 @@ frontend/dist/
 reports/
 *.db
 *.sqlite
-backend/models/*.joblib
+backend/models/
 .env
