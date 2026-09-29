@@ -36,6 +36,7 @@ class LiveCutoff:
     g_star: float
     alpha: float = 0.08
     hold_hours: float = 12.0
+    t_min_h: float = 0.0          # do not stop before the forecast's main q_net peak
     ewma: float | None = None
     peak: float = -np.inf
     below_since_h: float | None = None
@@ -48,6 +49,8 @@ class LiveCutoff:
         self.ewma = q_net_value if self.ewma is None else self.alpha * q_net_value + (1 - self.alpha) * self.ewma
         self.history.append((t_h, q_net_value, self.ewma))
         self.peak = max(self.peak, self.ewma)
+        if t_h < self.t_min_h:
+            return False
         falling = self._falling()
         if falling and self.ewma <= self.g_star:
             if self.below_since_h is None:

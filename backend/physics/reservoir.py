@@ -21,8 +21,8 @@ injected water is assumed produced back, so only oil voidage depletes pressure).
 
 Heated-zone oil depletion (extension beyond Boberg-Lantz, PLACEHOLDER parameters):
 the stimulated inflow comes mostly from the heated zone, whose recoverable oil is
-N_rec = pi r_h^2 h phi (S_oi - S_or_hot), reduced by oil already produced in earlier
-cycles. The stimulation fades as it is produced:
+N_rec = pi r_h^2 h phi (S_oi - S_or_hot), reduced by half of the oil produced in earlier
+cycles (floor 30 %). The stimulation fades as it is produced:
     SR_eff = 1 + (SR - 1) * (1 - N_p,cycle / N_rec)^n
 This gives the rise-then-decline cycle shape and the cycle-to-cycle decline that the
 cut-off (§8.2) and recipe optimizer (§8.3) act on.
@@ -144,7 +144,9 @@ class CSSReservoir:
         self.E_removed = 0.0
         pore = np.pi * self.r_h ** 2 * prm.h * prm.porosity
         gross = pore * (prm.S_oi - prm.S_or_hot)
-        self.N_rec = float(max(gross - self.cum_oil, 0.15 * gross))
+        # half of earlier production is attributed to the currently heated region (the rest came
+        # from beyond it / was replenished by drainage); never below 30 % of the gross.
+        self.N_rec = float(max(gross - 0.5 * self.cum_oil, 0.3 * gross))
         self.cycle_oil = 0.0
         return self.r_h
 

@@ -2,7 +2,7 @@ interval:           {value: 1.0, unit: h, source: "control setting"}
 fillage_target:     {value: 0.87, unit: fraction, source: "PLACEHOLDER - calibrate"}
 Kp:                 {value: 3.0, unit: SPM/fraction, source: "PLACEHOLDER - tune"}
 Ki:                 {value: 0.25, unit: SPM/fraction/h, source: "PLACEHOLDER - tune"}
-integral_limit:     {value: 1.5, unit: SPM, source: "PLACEHOLDER - tune (anti-windup)"}
+integral_limit:     {value: 3.0, unit: SPM, source: "PLACEHOLDER - tune (anti-windup)"}
 spm_min:            {value: 1.5, unit: 1/min, source: "PLACEHOLDER - calibrate"}
 spm_max:            {value: 7.0, unit: 1/min, source: "PLACEHOLDER - calibrate"}
 max_spm_change:     {value: 0.6, unit: 1/min per interval, source: "PLACEHOLDER - calibrate"}
@@ -14,7 +14,7 @@ upstroke_max_factor: {value: 1.15, unit: "-", source: "PLACEHOLDER - calibrate"}
 spm_step_on_pound:  {value: 0.3, unit: 1/min, source: "PLACEHOLDER - calibrate"}
 pound_fillage:      {value: 0.7, unit: fraction, source: "PLACEHOLDER - calibrate"}
 pound_sustain:      {value: 3, unit: cards, source: "control setting"}
-vfd_hz_min:         {value: 15.0, unit: Hz, source: "PLACEHOLDER - calibrate"}
+vfd_hz_min:         {value: 8.0, unit: Hz, source: "PLACEHOLDER - calibrate (force-cooled motor)"}
 vfd_hz_max:         {value: 75.0, unit: Hz, source: "PLACEHOLDER - calibrate"}
 stress_ratio_max:   {value: 1.0, unit: "-", source: "API RP 11BR (Goodman)"}
 max_data_age:       {value: 3.0, unit: h, source: "control setting"}
@@ -26,7 +26,7 @@ band_spm:           {value: 0.5, unit: 1/min, source: "operator band default"}
 band_downstroke:    {value: 0.2, unit: "-", source: "operator band default"}
 clf_min_conf:       {value: 0.55, unit: probability, source: "control setting"}
 ewma_alpha:         {value: 0.08, unit: "-", source: "control setting"}
-hold_hours:         {value: 12.0, unit: h, source: "PLACEHOLDER - tune"}
+hold_hours:         {value: 24.0, unit: h, source: "PLACEHOLDER - tune"}
 calibration:
   rls_lambda:       {value: 0.995, unit: "-", source: "BUILD_SPEC default (forgetting factor)"}
   rls_P0_A:         {value: 0.02, unit: "-", source: "PLACEHOLDER - prior variance of Walther A"}
