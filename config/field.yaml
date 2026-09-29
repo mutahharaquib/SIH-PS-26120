@@ -23,7 +23,7 @@ reservoir:
   net_thickness:      {value: [8.0, 18.0], unit: m, source: "PLACEHOLDER - calibrate"}
   p_initial:          {value: [55.0, 75.0], unit: bar, source: "PLACEHOLDER - calibrate (problem statement: low pressure)"}
   p_min:              {value: 12.0, unit: bar, source: "PLACEHOLDER - calibrate"}
-  J_cold:             {value: [0.035, 0.07], unit: m3/d/bar, source: "PLACEHOLDER - calibrate"}
+  J_cold:             {value: [0.06, 0.11], unit: m3/d/bar, source: "PLACEHOLDER - calibrate"}
   r_w:                {value: 0.089, unit: m, source: "PLACEHOLDER - calibrate (7in casing hole)"}
   r_e:                {value: 120.0, unit: m, source: "PLACEHOLDER - calibrate"}
   M_R:                {value: 2.35e6, unit: J/m3/K, source: "PLACEHOLDER - calibrate (typical sandstone+fluids)"}
