@@ -135,18 +135,16 @@ class ForwardResult:
 
 @njit(cache=True)
 def _forward_kernel(uc, dt, m, k, c, w, tops, tops_A, F_fo, friction, fillage, gas, unseated, S_p0,
-                    n_strokes, allow_float, u_init, record_energy):  # pragma: no cover - jit
+                    n_strokes, allow_float, u_init, record_energy, A_p, p_i):  # pragma: no cover - jit
     n_t = uc.shape[0]
     nn = m.shape[0]
     cdt = 0.5 * c * dt
     u = u_init.copy()
     u_prev = u_init.copy()
-    st = np.zeros(9)
-    st[0] = -1.0
-    st[4] = S_p0
-    st[3] = u_init[nn - 1]
-    st[7] = u_init[nn - 1]
-    st[8] = 0.015 * S_p0
+    st = np.zeros(11)
+    st[0] = p_i + F_fo / A_p     # bottom of stroke: TV open
+    st[6] = 1.0
+    st[8] = S_p0
     clamped = True
     total = n_strokes * n_t
     last0 = (n_strokes - 1) * n_t
@@ -176,7 +174,7 @@ def _forward_kernel(uc, dt, m, k, c, w, tops, tops_A, F_fo, friction, fillage, g
             F[e] += T[e]
             F[e + 1] -= T[e]
         vN = (u[nn - 1] - u_prev[nn - 1]) / dt
-        Fp = pump_force(st, F_fo, friction, fillage, gas, unseated, u[nn - 1], vN)
+        Fp = pump_force(st, F_fo, friction, fillage, gas, unseated, u[nn - 1], vN, A_p, p_i)
         F[nn - 1] += Fp
         for i in range(nn):
             u_new[i] = (2.0 * u[i] - (1.0 - cdt[i]) * u_prev[i] + dt * dt * F[i] / m[i]) / (1.0 + cdt[i])
@@ -245,7 +243,7 @@ def predictive(grid: RodGrid, x_surface: np.ndarray, dt: float, c_nodes: np.ndar
     out = _forward_kernel(uc, float(dt), grid.m, grid.k, np.asarray(c_nodes, dtype=float), w_nodes, tops,
                           grid.A[tops].astype(float), float(pump.F_fo), float(pump.friction), float(cond.fillage),
                           bool(cond.gas), bool(cond.unseated), float(pump.S_p), int(n_strokes), bool(allow_float),
-                          u0, bool(record_energy))
+                          u0, bool(record_energy), float(pump.A_p), float(pump.p_intake))
     rec_load, rec_pump, rec_uN, rec_u0, sep, smax, smin, min_T, impacts, impact_js, energy = out
     impact_load = 0.0
     for j in impact_js[: min(int(impacts), 64)]:

@@ -79,7 +79,7 @@ drivetrain:
 
 drag:
   drag_multiplier:    {value: 1.5, unit: "-", source: "PLACEHOLDER - calibrate (couplings/guides)"}
-  damping_floor:      {value: 0.12, unit: 1/s, source: "PLACEHOLDER - structural/fluid damping floor (Gibbs-type)"}
+  damping_floor:      {value: 0.8, unit: 1/s, source: "PLACEHOLDER - structural/fluid damping floor (Gibbs D~0.025)"}
 
 simulation:
   n_wells:            {value: 12, unit: "-", source: "numerical setting"}

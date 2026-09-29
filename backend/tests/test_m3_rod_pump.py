@@ -107,10 +107,20 @@ def test_stress_at_taper_is_load_over_local_area():
 
 
 def test_energy_decays_with_damping():
-    *_, undamped = _forward(0.0, 2, record_energy=True)
-    *_, damped = _forward(1.5, 2, record_energy=True)
-    n = len(damped.energy_hist)
-    assert damped.energy_hist[-n // 5:].max() < 0.5 * undamped.energy_hist[-n // 5:].max()
+    """Free vibration after a step of the polished rod: kinetic energy decays only with damping."""
+    n = 3000
+    x = np.full(n, 0.2)
+    x[0] = 0.0
+    w = GRID.node_weights(950.0)
+    out = {}
+    for c_level in (0.0, 1.0):
+        pump = DownholePump(WP.A_p, 0.0, friction=0.0, cond=PumpCondition(unseated=True))
+        f = predictive(GRID, x, GRID.dt_cfl * 0.9, np.full(len(GRID.z), c_level), w, pump, n_strokes=1,
+                       allow_float=False, record_energy=True)
+        out[c_level] = f.energy_hist
+    early, late = slice(50, 600), slice(-600, -5)   # skip the periodic wrap-around step at the end
+    assert out[1.0][late].max() < 0.05 * out[1.0][early].max()
+    assert out[0.0][late].max() > 0.5 * out[0.0][early].max()
 
 
 def test_cfl_violation_raises():

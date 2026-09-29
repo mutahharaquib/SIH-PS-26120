@@ -80,7 +80,7 @@ def simulate_stroke(wp: WellParams, grid: RodGrid, spm: float, profile: SpeedPro
     c, w, vfm = rod_coefficients(wp, grid, mu_nodes, rho_fluid)
     kin = kinematics(wp.unit, spm, profile, dt=grid.dt_cfl * FORWARD_CFL)
     F_fo = max(0.0, (wp.p_discharge(rho_fluid) - p_intake) * wp.A_p)
-    pump = DownholePump(A_p=wp.A_p, F_fo=F_fo, cond=cond, S_p=kin.stroke)
+    pump = DownholePump(A_p=wp.A_p, F_fo=F_fo, cond=cond, S_p=kin.stroke, p_intake=p_intake)
     fwd = predictive(grid, kin.x, kin.t[1] - kin.t[0], c, w, pump, n_strokes=n_strokes, allow_float=allow_float)
     p_pr = energy.polished_rod_power(fwd.surface_pos, fwd.surface_load, kin.spm_effective)
     return StrokeResult(fwd=fwd, kin=kin, F_fo=F_fo, pr_power=p_pr, stress_ratio=np.zeros(len(wp.rods.sections)),

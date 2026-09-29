@@ -48,7 +48,7 @@ def marx_langenheim_area(Q_i: float, M_R: float, h: float, lambda_ob: float, M_o
 
 
 def f_VD(t_s: float, h: float, alpha: float) -> float:
-    if t_s <= 0:
+    if t_s < 1e-3:
         return 1.0
     X = h / (2.0 * np.sqrt(alpha * t_s))
     if X > 50:
@@ -57,7 +57,7 @@ def f_VD(t_s: float, h: float, alpha: float) -> float:
 
 
 def f_HD(t_s: float, r_h: float, alpha: float) -> float:
-    if t_s <= 0:
+    if t_s < 1e-3:
         return 1.0
     if r_h <= 0:
         return 0.0
