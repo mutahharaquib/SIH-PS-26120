@@ -110,7 +110,9 @@ def build_well_params(cfg: Config, well_id: str, choice: dict[str, Any] | None =
         T_R=T_R, h=pick("reservoir.net_thickness"), M_R=cfg.v(f + "reservoir.M_R"), M_ob=cfg.v(f + "reservoir.M_ob"),
         lambda_ob=cfg.v(f + "reservoir.lambda_ob"), r_w=cfg.v(f + "reservoir.r_w"), r_e=cfg.v(f + "reservoir.r_e"),
         p_init=pick("reservoir.p_initial") * BAR, p_min=cfg.v(f + "reservoir.p_min") * BAR,
-        compliance=pick("reservoir.tank_compliance") / BAR,
+        compliance=pick("reservoir.tank_compliance") / BAR, porosity=cfg.v(f + "reservoir.porosity"),
+        S_oi=cfg.v(f + "reservoir.S_oi"), S_or_hot=cfg.v(f + "reservoir.S_or_hot"),
+        dep_exp=cfg.v(f + "reservoir.depletion_exponent"),
     )
     visc = model_for_api(cfg.v(f + "crude.viscosity_lab_points"), api, cfg.v(f + "crude.api_log_visc_slope"),
                          cfg.v(f + "crude.thermal_expansion"))

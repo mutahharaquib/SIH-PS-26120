@@ -106,6 +106,7 @@ class ViscosityModel:
     placeholder: bool = True
     source: str = "physics.viscosity(Walther/ASTM D341)"
     tags: dict[str, float] = field(default_factory=dict)
+    scale: float = 1.0          # multiplicative calibration factor (uncertainty sampling)
 
     @property
     def fit_range(self) -> tuple[float, float]:
@@ -115,9 +116,9 @@ class ViscosityModel:
 
     def mu_value(self, T_K: np.ndarray | float) -> np.ndarray:
         if self.walther is not None:
-            return self.walther.nu(T_K) * 1e-6 * self.rho_fn(T_K)
+            return self.scale * self.walther.nu(T_K) * 1e-6 * self.rho_fn(T_K)
         assert self.arrhenius is not None
-        return self.arrhenius.mu(T_K)
+        return self.scale * self.arrhenius.mu(T_K)
 
     def nu_value(self, T_K: np.ndarray | float) -> np.ndarray:
         return self.mu_value(T_K) / self.rho_fn(T_K) * 1e6

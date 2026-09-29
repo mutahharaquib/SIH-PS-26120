@@ -18,6 +18,14 @@ Carry-over: the heat left at the end of a cycle, E_res = pi r_h^2 h M_R (T_avg -
 is added to the next cycle's heated volume at the new steam temperature.
 Depletion: tank model, dp = -(oil voidage) / compliance (documented choice:
 injected water is assumed produced back, so only oil voidage depletes pressure).
+
+Heated-zone oil depletion (extension beyond Boberg-Lantz, PLACEHOLDER parameters):
+the stimulated inflow comes mostly from the heated zone, whose recoverable oil is
+N_rec = pi r_h^2 h phi (S_oi - S_or_hot), reduced by oil already produced in earlier
+cycles. The stimulation fades as it is produced:
+    SR_eff = 1 + (SR - 1) * (1 - N_p,cycle / N_rec)^n
+This gives the rise-then-decline cycle shape and the cycle-to-cycle decline that the
+cut-off (§8.2) and recipe optimizer (§8.3) act on.
 """
 
 from __future__ import annotations
@@ -89,6 +97,10 @@ class ReservoirParams:
     p_init: float
     p_min: float
     compliance: float     # m3 / Pa
+    porosity: float = 0.28
+    S_oi: float = 0.75
+    S_or_hot: float = 0.30
+    dep_exp: float = 2.0
 
     @property
     def alpha_ob(self) -> float:
@@ -108,6 +120,8 @@ class CSSReservoir:
     E_removed: float = 0.0            # J removed with produced fluids this cycle
     E_residual: float = 0.0           # J carried over from the previous cycle
     cum_oil: float = 0.0              # m3, all cycles
+    cycle_oil: float = 0.0            # m3, this cycle
+    N_rec: float = 0.0                # m3 recoverable heated-zone oil this cycle
     history: list[dict] = field(default_factory=list)
 
     def __post_init__(self) -> None:
@@ -128,6 +142,10 @@ class CSSReservoir:
         self.r_h = float(np.sqrt(A / np.pi))
         self.t_since_heat = 0.0
         self.E_removed = 0.0
+        pore = np.pi * self.r_h ** 2 * prm.h * prm.porosity
+        gross = pore * (prm.S_oi - prm.S_or_hot)
+        self.N_rec = float(max(gross - self.cum_oil, 0.15 * gross))
+        self.cycle_oil = 0.0
         return self.r_h
 
     # --- soak / production ----------------------------------------------
@@ -154,7 +172,17 @@ class CSSReservoir:
         self.t_since_heat += dt_s
         vo = q_oil * dt_s
         self.cum_oil += vo
+        self.cycle_oil += vo
         self.p_res = max(self.prm.p_min, self.p_res - vo / self.prm.compliance)
+
+    def depletion_factor(self) -> float:
+        if self.N_rec <= 0:
+            return 1.0
+        return float(max(0.0, 1.0 - self.cycle_oil / self.N_rec) ** self.prm.dep_exp)
+
+    def effective_sr(self, sr: float) -> float:
+        """Stimulation ratio after heated-zone oil depletion."""
+        return 1.0 + (sr - 1.0) * self.depletion_factor()
 
     def end_cycle(self) -> float:
         """Close the cycle; the heat remaining is carried into the next one."""

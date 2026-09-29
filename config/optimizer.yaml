@@ -9,9 +9,9 @@ min_sandface_quality: {value: 0.35, unit: fraction, source: "PLACEHOLDER - calib
 p_wf_target:        {value: 6.0, unit: bar, source: "PLACEHOLDER - calibrate"}
 T_max:              {value: 150.0, unit: d, source: "PLACEHOLDER - calibrate"}
 dt_cycle:           {value: 1.0, unit: d, source: "numerical setting"}
-n_init:             {value: 10, unit: "-", source: "BUILD_SPEC (8-12 Sobol)"}
+n_init:             {value: 8, unit: "-", source: "BUILD_SPEC (8-12 Sobol)"}
 n_iter:             {value: 30, unit: "-", source: "BUILD_SPEC (30-60)"}
-n_init_fast:        {value: 6, unit: "-", source: "harness setting"}
+n_init_fast:        {value: 8, unit: "-", source: "harness setting"}
 n_iter_fast:        {value: 10, unit: "-", source: "harness setting"}
 n_param_samples:    {value: 8, unit: "-", source: "uncertainty: calibration-parameter samples"}
 seed:               {value: 7, unit: "-", source: "numerical setting"}

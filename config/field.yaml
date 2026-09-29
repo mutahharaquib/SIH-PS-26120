@@ -32,6 +32,10 @@ reservoir:
   # Tank-model depletion: bar of pressure lost per m3 of oil voidage is 1/compliance.
   tank_compliance:    {value: [180.0, 300.0], unit: m3/bar, source: "PLACEHOLDER - calibrate"}
   injectivity:        {value: 9.0, unit: t/d/bar, source: "PLACEHOLDER - calibrate"}
+  porosity:           {value: 0.28, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  S_oi:               {value: 0.75, unit: fraction, source: "PLACEHOLDER - calibrate"}
+  S_or_hot:           {value: 0.30, unit: fraction, source: "PLACEHOLDER - calibrate (residual oil in heated zone)"}
+  depletion_exponent: {value: 2.0, unit: "-", source: "PLACEHOLDER - heated-zone depletion (rel-perm style) exponent"}
 
 water_cut:
   wc_early:           {value: 0.92, unit: fraction, source: "PLACEHOLDER - calibrate"}

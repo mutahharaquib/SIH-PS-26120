@@ -211,7 +211,8 @@ class WellSimulator:
         # truth record
         T_avg = self.res.T_avg()
         mu_c = float(wp.visc.mu_value(wp.T_R))
-        sr_ = stimulation_ratio(wp.res.r_e, wp.res.r_w, self.res.r_h, float(wp.visc.mu_value(T_avg)), mu_c)
+        sr_ = self.res.effective_sr(stimulation_ratio(wp.res.r_e, wp.res.r_w, self.res.r_h,
+                                                      float(wp.visc.mu_value(T_avg)), mu_c))
         truth_kw["sr"] = sr_
         self.truth.append(HiddenTruth(
             t=self.t, well_id=wp.well_id, phase=self.phase.value, cycle=self.cycle, dt_h=dt / HOUR, T_avg=T_avg,
@@ -228,7 +229,7 @@ class WellSimulator:
         res = self.res
         T_avg = res.T_avg()
         mu_c = float(wp.visc.mu_value(wp.T_R))
-        sr = stimulation_ratio(wp.res.r_e, wp.res.r_w, res.r_h, float(wp.visc.mu_value(T_avg)), mu_c)
+        sr = res.effective_sr(stimulation_ratio(wp.res.r_e, wp.res.r_w, res.r_h, float(wp.visc.mu_value(T_avg)), mu_c))
         wc = float(water_cut(self.t_prod, wp.wc_early, wp.wc_late, wp.wc_tau))
         rho = wp.rho_liquid(T_avg, wc)
         p_intake = wp.p_casing + rho * G * self.level
