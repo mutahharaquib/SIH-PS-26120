@@ -9,7 +9,7 @@ crude:
   # Dead-oil lab viscosity points for an 18 degAPI reference crude (T_K, nu_cSt).
   # Fitted with Walther/ASTM D341 at start-up; per-well RLS refines A,B online.
   viscosity_lab_points:
-    value: [[303.15, 42000.0], [320.15, 9000.0], [343.15, 1500.0], [373.15, 260.0], [423.15, 45.0], [473.15, 14.0]]
+    value: [[303.15, 6000.0], [320.15, 1800.0], [343.15, 450.0], [373.15, 110.0], [423.15, 25.0], [473.15, 9.0]]
     unit: "[K, cSt]"
     source: "PLACEHOLDER - calibrate"
   # log10(nu) shift per degAPI away from 18 (heavier crude -> more viscous)
@@ -26,8 +26,8 @@ reservoir:
   J_cold:             {value: [0.06, 0.11], unit: m3/d/bar, source: "PLACEHOLDER - calibrate"}
   r_w:                {value: 0.089, unit: m, source: "PLACEHOLDER - calibrate (7in casing hole)"}
   r_e:                {value: 120.0, unit: m, source: "PLACEHOLDER - calibrate"}
-  M_R:                {value: 2.35e6, unit: J/m3/K, source: "PLACEHOLDER - calibrate (typical sandstone+fluids)"}
-  M_ob:               {value: 2.30e6, unit: J/m3/K, source: "PLACEHOLDER - calibrate (typical shale)"}
+  M_R:                {value: 2.35e+6, unit: J/m3/K, source: "PLACEHOLDER - calibrate (typical sandstone+fluids)"}
+  M_ob:               {value: 2.30e+6, unit: J/m3/K, source: "PLACEHOLDER - calibrate (typical shale)"}
   lambda_ob:          {value: 1.7, unit: W/m/K, source: "PLACEHOLDER - calibrate"}
   # Tank-model depletion: bar of pressure lost per m3 of oil voidage is 1/compliance.
   tank_compliance:    {value: [180.0, 300.0], unit: m3/bar, source: "PLACEHOLDER - calibrate"}
@@ -45,7 +45,7 @@ wellbore:
   r_ci:               {value: 0.0785, unit: m, source: "PLACEHOLDER - calibrate (7in casing ID)"}
   r_cw:               {value: 0.108, unit: m, source: "PLACEHOLDER - calibrate (cement/wellbore radius)"}
   U_inject:           {value: 12.0, unit: W/m2/K, source: "PLACEHOLDER - calibrate"}
-  U_produce:          {value: 25.0, unit: W/m2/K, source: "PLACEHOLDER - calibrate"}
+  U_produce:          {value: 8.0, unit: W/m2/K, source: "PLACEHOLDER - calibrate"}
   k_e:                {value: 2.0, unit: W/m/K, source: "PLACEHOLDER - calibrate"}
   alpha_e:            {value: 9.0e-7, unit: m2/s, source: "PLACEHOLDER - calibrate"}
   n_cells:            {value: 100, unit: "-", source: "numerical setting"}
@@ -78,7 +78,8 @@ drivetrain:
   total_reduction:    {value: 120.0, unit: "-", source: "PLACEHOLDER - calibrate (gearbox x sheave)"}
 
 drag:
-  drag_multiplier:    {value: 2.0, unit: "-", source: "PLACEHOLDER - calibrate (couplings/guides)"}
+  drag_multiplier:    {value: 1.5, unit: "-", source: "PLACEHOLDER - calibrate (couplings/guides)"}
+  damping_floor:      {value: 0.12, unit: 1/s, source: "PLACEHOLDER - structural/fluid damping floor (Gibbs-type)"}
 
 simulation:
   n_wells:            {value: 12, unit: "-", source: "numerical setting"}

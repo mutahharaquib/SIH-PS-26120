@@ -83,3 +83,14 @@ def test_store_cards_and_states(sample_state):
     assert s.cards("W01")[0].load == [1, 2, 1]
     # every quantity in a persisted state keeps its tier
     assert all(qq.prov.tier in Tier for _, qq in iter_quantities(hist[0]))
+
+
+def test_no_numeric_strings_in_config():
+    import re
+
+    num = re.compile(r"^[-+]?\d+(\.\d*)?([eE][-+]?\d+)?$")
+    for path, node in get_config().leaves():
+        vals = node["value"] if isinstance(node["value"], list) else [node["value"]]
+        flat = [x for v in vals for x in (v if isinstance(v, list) else [v])]
+        for v in flat:
+            assert not (isinstance(v, str) and num.match(v)), f"{path}: numeric string {v!r}"
