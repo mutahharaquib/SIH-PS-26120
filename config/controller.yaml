@@ -27,3 +27,13 @@ band_downstroke:    {value: 0.2, unit: "-", source: "operator band default"}
 clf_min_conf:       {value: 0.55, unit: probability, source: "control setting"}
 ewma_alpha:         {value: 0.08, unit: "-", source: "control setting"}
 hold_hours:         {value: 12.0, unit: h, source: "PLACEHOLDER - tune"}
+calibration:
+  rls_lambda:       {value: 0.995, unit: "-", source: "BUILD_SPEC default (forgetting factor)"}
+  rls_P0_A:         {value: 0.02, unit: "-", source: "PLACEHOLDER - prior variance of Walther A"}
+  rls_P0_B:         {value: 0.003, unit: "-", source: "PLACEHOLDER - prior variance of Walther B"}
+  rls_max_dA:       {value: 0.08, unit: "-", source: "PLACEHOLDER - guardrail per update"}
+  rls_max_dB:       {value: 0.03, unit: "-", source: "PLACEHOLDER - guardrail per update"}
+  rls_outlier_sigma: {value: 6.0, unit: sigma, source: "PLACEHOLDER - guardrail on innovation"}
+  refit_every:      {value: 7.0, unit: d, source: "BUILD_SPEC (every K days)"}
+  refit_max_rel:    {value: 0.6, unit: fraction, source: "PLACEHOLDER - guardrail on J_c change per refit"}
+  refit_min_points: {value: 24, unit: "-", source: "numerical setting"}
