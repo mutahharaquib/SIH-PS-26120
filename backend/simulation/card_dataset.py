@@ -37,9 +37,9 @@ class CardSample:
 
 
 def _conditions(target: str, rng: np.random.Generator) -> dict:
-    c = dict(fill=rng.uniform(0.92, 1.0), gas=False, unseated=False, T_pump=rng.uniform(390, 520),
-             q=rng.uniform(8, 25), wc=rng.uniform(0.3, 0.7), spm=rng.uniform(2.5, 5.5), ds=1.0,
-             p_int=rng.uniform(3, 20))
+    c = dict(fill=rng.uniform(0.72, 1.0), gas=False, unseated=False, T_pump=rng.uniform(360, 540),
+             q=rng.uniform(4, 30), wc=rng.uniform(0.3, 0.9), spm=rng.uniform(1.5, 7.0),
+             ds=float(rng.choice([1.0, 1.0, rng.uniform(0.45, 1.0)])), p_int=float(np.exp(rng.uniform(np.log(3), np.log(55)))))
     if target == "fluid_pound":
         c["fill"] = rng.uniform(0.3, 0.66)
     elif target == "gas_interference":

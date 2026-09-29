@@ -66,7 +66,7 @@ def twin_params(cfg: Config, meta: WellMetadata) -> WellParams:
 class WellTwin:
     def __init__(self, meta: WellMetadata, cfg: Config | None = None, classifier: CardClassifier | None = None,
                  mode: Mode = "advisory", bo_fast: bool = False, auto_cycle: bool = False,
-                 econ: Econ | None = None, publish: bool = True):
+                 econ: Econ | None = None, publish: bool = True, optimize: bool = True):
         self.cfg = c = cfg or get_config()
         self.meta = meta
         self.id = meta.well_id
@@ -91,6 +91,7 @@ class WellTwin:
         self.clf = classifier
         self.clf_min_conf = c.v("controller.clf_min_conf")
         self.auto_cycle = auto_cycle
+        self.optimize = optimize
         self.publish = publish
         self.p_wf_target = c.v("optimizer.p_wf_target") * BAR
         self.x_surface = c.v("optimizer.surface_quality")
@@ -337,7 +338,7 @@ class WellTwin:
         return self.rec_summary
 
     def _idle(self, tel: Telemetry) -> list[Command]:
-        if self.rec is None:
+        if self.rec is None and self.optimize:
             self.optimize_cycle()
         cmds: list[Command] = []
         if self.auto_cycle and self.rec is not None:
@@ -408,7 +409,7 @@ class WellTwin:
         self.cycle_value += self.qnet_now * dt_h / 24
         # live cut-off on the twin's calibrated inflow potential (refit weekly against measured
         # rates) so pump-side transients (gas lock, unseat, downtime) are not read as reservoir decline
-        q_pot = min(self.q_in_pred, max(q_in_now, q_liq)) if tel.running else self.q_in_pred
+        q_pot = self.q_in_pred
         self.qnet_potential = float(q_net(q_pot * (1 - self.wc), p_kw, q_pot * self.wc, self.econ))
         if self.live is not None:
             if self.live.update(self.t_prod_h, self.qnet_potential) and not self.stop_recommended:
@@ -479,10 +480,18 @@ class WellTwin:
             pred = self.clf.predict(dp, dl, card.position, card.load, F_ref=F_fo)
             self.fault_probs = pred.probs
             self.fault_class = pred.label
+            # physics cross-check: an unseated pump cannot deliver liquid
+            if pred.label == "pump_unseated" and tel.liquid_rate_m3d is not None:
+                ev = volumetric_efficiency(tel.liquid_rate_m3d, self.wp.A_p, stroke_length(self.wp.unit),
+                                           card.spm or self.spm)
+                if ev > 0.3:
+                    self.fault_class = "unknown"
+                    self._alarm(tel.t, "classifier_conflict", "info",
+                                f"Card looks unseated but volumetric efficiency is {ev:.2f}; label withheld")
             self.unknown_streak = self.unknown_streak + 1 if pred.label == "unknown" else 0
-            if pred.label == "pump_unseated":
+            if self.fault_class == "pump_unseated":
                 self._alarm(tel.t, "pump_unseated", "critical", "Classifier: pump unseated")
-            elif pred.label == "rod_float":
+            elif self.fault_class == "rod_float":
                 self._alarm(tel.t, "rod_float", "alarm", "Classifier: rod float on card")
         self.pound_streak = self.pound_streak + 1 if (self.fault_class == "fluid_pound" or
                                                        (self.fillage_card or 1) < self.ctrl.s.pound_fillage) else 0

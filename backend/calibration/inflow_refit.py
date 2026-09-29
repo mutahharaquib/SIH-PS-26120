@@ -49,11 +49,12 @@ def refit(obs: list[InflowObs], J_c0: float, wc_early: float, wc_late0: float, t
         r_q = (np.exp(lnJ) * d - q) / q_scale
         wc_m = wl + (wc_early - wl) * np.exp(-t / np.exp(lntau))
         r_w = (wc_m[wc_mask] - wc[wc_mask]) / 0.05
-        return np.concatenate([r_q, r_w])
+        prior = np.array([(wl - wc_late0) / 0.15, (lntau - np.log(tau0)) / 0.7])   # weak priors
+        return np.concatenate([r_q, r_w, prior])
 
     x0 = np.array([np.log(J_c0), wc_late0, np.log(tau0)])
     sol = least_squares(resid, x0, loss="soft_l1", f_scale=1.0,
-                        bounds=([np.log(1e-4), 0.0, np.log(0.5)], [np.log(10.0), 0.99, np.log(90.0)]))
+                        bounds=([np.log(1e-4), 0.05, np.log(0.5)], [np.log(10.0), 0.95, np.log(90.0)]))
     J = float(np.exp(sol.x[0]))
     std = None
     try:
@@ -65,7 +66,7 @@ def refit(obs: list[InflowObs], J_c0: float, wc_early: float, wc_late0: float, t
     r = resid(sol.x)
     nq = len(q)
     rm_q = float(np.sqrt(np.mean((r[:nq] * q_scale) ** 2)))
-    rm_w = float(np.sqrt(np.mean((r[nq:] * 0.05) ** 2))) if wc_mask.any() else float("nan")
+    rm_w = float(np.sqrt(np.mean((r[nq:-2] * 0.05) ** 2))) if wc_mask.any() else float("nan")
     if abs(J / J_c0 - 1.0) > max_rel:
         return RefitResult(J_c0, wc_late0, tau0, False, "guardrail_J_c", rm_q, rm_w, nq, std)
     return RefitResult(J, float(sol.x[1]), float(np.exp(sol.x[2])), True, "ok", rm_q, rm_w, nq, std)

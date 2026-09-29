@@ -1,0 +1,17 @@
+# OPC UA tag mapping (BUILD_SPEC §15). Replace with the real SCADA tag list later;
+# the twin only depends on the logical names on the left.
+namespace: "urn:sih26120:css-srp-twin"
+well_object: "Well_{well_id}"
+telemetry:            # read
+  liquid_rate_m3d:   "LiquidRate"
+  water_cut:         "WaterCut"
+  p_intake_bar:      "IntakePressure"
+  T_wellhead_K:      "WellheadTemperature"
+  motor_power_kw:    "MotorPower"
+  spm_eff:           "SPM_Actual"
+  phase:             "CyclePhase"
+  running:           "Running"
+setpoints:            # write (supervised / autonomous modes only)
+  spm:               "SPM_Setpoint"
+  downstroke:        "DownstrokeFactor"
+  run:               "RunCommand"

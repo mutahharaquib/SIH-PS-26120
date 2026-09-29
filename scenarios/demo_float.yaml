@@ -1,0 +1,16 @@
+# Reproducible demo scenario (BUILD_SPEC §14):
+#   a cooling event raises viscosity -> RFI rises -> the controller reshapes the downstroke
+#   -> float is avoided -> the UI shows the avoided-event impact in energy, SOR and currency
+#   against the baseline run of the same scenario (same seed, noise and events).
+name: demo_float
+description: "Cold snap / tubing cooling on W01 during cycle-1 production"
+seed: 1
+n_wells: 4
+well: W01
+horizon_days: 200
+events:
+  # days from simulation start; magnitude = drop of the near-surface geotherm (K)
+  - {kind: cooling, start_day: 75, end_day: 115, magnitude: 22.0}
+live:
+  mode: autonomous
+  seconds_per_day: 4.0
