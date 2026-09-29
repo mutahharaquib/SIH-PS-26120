@@ -8,6 +8,7 @@ from datetime import datetime
 
 from sqlalchemy import DateTime, Integer, String, Text, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
+from sqlalchemy.pool import StaticPool
 
 from core.state import Card, WellState
 
@@ -35,7 +36,14 @@ class CardRow(Base):
 
 class Store:
     def __init__(self, url: str = "sqlite:///:memory:") -> None:
-        self.engine = create_engine(url, future=True)
+        if url.startswith("sqlite") and ":memory:" in url:
+            # one shared connection so every thread sees the same in-memory database
+            self.engine = create_engine(url, future=True, poolclass=StaticPool,
+                                        connect_args={"check_same_thread": False})
+        elif url.startswith("sqlite"):
+            self.engine = create_engine(url, future=True, connect_args={"check_same_thread": False})
+        else:
+            self.engine = create_engine(url, future=True)
         Base.metadata.create_all(self.engine)
 
     def save_state(self, state: WellState) -> None:

@@ -148,7 +148,9 @@ class WellSimulator:
 
     def _stroke(self, wp: WellParams, mu: np.ndarray, rho: float, p_intake: float, cond: PumpCondition) -> dict:
         lm = np.log10(np.maximum(mu, 1e-4))
-        key = (round(self.spm, 2), tuple(np.round(self.profile.downstroke, 2)), tuple(np.round(self.profile.upstroke, 2)),
+        # stroke dynamics are evaluated on a 0.05-SPM / 0.05-profile grid (cache efficiency)
+        key = (round(self.spm * 20) / 20, tuple(np.round(np.asarray(self.profile.downstroke) * 20) / 20),
+               tuple(np.round(np.asarray(self.profile.upstroke) * 20) / 20),
                round(wp.unit.R, 3), round(lm[0] * 20) / 20, round(float(lm.mean()) * 20) / 20, round(lm[-1] * 10) / 10,
                round(cond.fillage * 20) / 20, cond.gas, cond.unseated, round(p_intake / BAR), round(rho, -1))
         hit = self._cache.get(key)
